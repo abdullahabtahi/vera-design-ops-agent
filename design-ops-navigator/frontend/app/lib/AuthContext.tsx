@@ -45,8 +45,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           // Initialize namespaced storage for this user
           initStorage(firebaseUser.uid);
 
-          // Set cookie for middleware route protection (30-day expiry)
-          document.cookie = `don_uid=${firebaseUser.uid}; path=/; max-age=${60 * 60 * 24 * 30}; SameSite=Strict`;
+          // Set HttpOnly session cookie via server route (what middleware checks)
+          await fetch("/api/auth/session", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ uid: firebaseUser.uid }),
+          }).catch(() => {});
 
           setUser(firebaseUser);
           setUid(firebaseUser.uid);
@@ -60,8 +64,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(null);
         setUid(null);
         initStorage(null);
-        // Clear cookie
-        document.cookie = "don_uid=; path=/; max-age=0; SameSite=Strict";
       }
       setLoading(false);
     });
