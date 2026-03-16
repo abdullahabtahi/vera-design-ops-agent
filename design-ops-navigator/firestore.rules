@@ -1,0 +1,46 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Users ──────────────────────────────────────────────────────────────────
+    // Each user can read and update only their own profile.
+    // Create is allowed (upsertUserProfile runs on first sign-in).
+    // Delete is not allowed from the client.
+    match /users/{uid} {
+      allow read, create, update: if request.auth != null && request.auth.uid == uid;
+      allow delete: if false;
+    }
+
+    // ── Waitlist ───────────────────────────────────────────────────────────────
+    // Anyone (unauthenticated) can submit an email.
+    // Only backend (service account) can read — no client read access.
+    match /waitlist/{id} {
+      allow create: if true;
+      allow read, update, delete: if false;
+    }
+
+    // ── Knowledge base (backend-only) ─────────────────────────────────────────
+    // Written by the backend service account via Admin SDK.
+    // No direct client access needed.
+    match /ux_knowledge/{id} {
+      allow read, write: if false;
+    }
+    match /user_knowledge/{id} {
+      allow read, write: if false;
+    }
+
+    // ── Agent sessions / trajectories (backend-only) ──────────────────────────
+    match /agent_sessions/{id} {
+      allow read, write: if false;
+    }
+    match /trajectories/{id} {
+      allow read, write: if false;
+    }
+
+    // ── Default: deny everything else ─────────────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

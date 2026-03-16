@@ -1,0 +1,28 @@
+.env
+.env.local
+.env.*.local
+service-account.json
+*.pem
+*.key
+*.log
+__pycache__/
+.venv/
+node_modules/
+.DS_Store
+
+# Next.js / frontend build artifacts
+.next/
+out/
+dist/
+build/
+.turbo/
+*.tsbuildinfo
+
+# Python caches / tooling artifacts
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.adk/
+
+# Local editor / agent config (keep private)
+.claude/
