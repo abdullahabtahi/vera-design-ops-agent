@@ -1,0 +1,61 @@
+{
+  "criteria": {
+    "tool_trajectory_avg_score": {
+      "threshold": 1.0,
+      "match_type": "ANY_ORDER"
+    },
+    "rubric_based_final_response_quality_v1": {
+      "threshold": 0.7,
+      "rubrics": [
+        {
+          "rubric_id": "critique_structure",
+          "rubric_content": {
+            "text_property": "The critique MUST be structured with clearly labeled sections. It MUST include at least one issue with a severity label in bold brackets (e.g. [CRITICAL], [HIGH], [MEDIUM], [LOW]). It MUST include a positive observations section ('What's Working') with at least one specific observation. A response that is just a paragraph of text with no structure fails this rubric."
+          }
+        },
+        {
+          "rubric_id": "rule_citations",
+          "rubric_content": {
+            "text_property": "Every issue MUST cite a specific UX rule from one of these sources: exact WCAG Success Criterion number and name (e.g. 'WCAG SC 1.4.3 Contrast Minimum'), Nielsen Heuristic number and name (e.g. 'Nielsen Heuristic #4 Consistency and Standards'), a named Gestalt principle (e.g. 'Gestalt Law of Proximity'), or a cognitive law (e.g. 'Fitts's Law', 'Hick's Law'). Issues without specific citations fail this rubric."
+          }
+        },
+        {
+          "rubric_id": "actionable_fixes",
+          "rubric_content": {
+            "text_property": "Every identified issue MUST include a specific 'Fix:' recommendation. For contrast/color issues: must include exact hex values and a computed contrast ratio (e.g. 'Change to #1a1a1a for 12.6:1 ratio'). For sizing issues: exact px or rem values. For spacing: exact values. Vague fixes like 'improve the contrast', 'make text larger', or 'add more whitespace' without specific numbers fail this rubric."
+          }
+        },
+        {
+          "rubric_id": "visual_grounding",
+          "rubric_content": {
+            "text_property": "The critique MUST reference specific named UI elements visible in the design (e.g. 'the primary CTA button', 'the navigation header', 'the card subtitle text', 'the search input placeholder'). Generic critiques that say 'the text' or 'a button' without identifying which element fail this rubric. The agent must demonstrate it actually looked at the specific design."
+          }
+        },
+        {
+          "rubric_id": "no_fatal_errors",
+          "rubric_content": {
+            "text_property": "The response MUST NOT contain error messages like 'The critique could not be completed', 'Figma frame may be inaccessible', or 'URL is invalid'. If such error messages are present, the critique pipeline failed and this rubric fails regardless of other content."
+          }
+        },
+        {
+          "rubric_id": "headline_first",
+          "rubric_content": {
+            "text_property": "The critique MUST open with the single most important finding — not a description of the frame layout. The first paragraph should name a critical issue, a ship-blocking problem, or (if the design is strong) what makes it work. A response that opens with 'This frame shows...' or 'The design depicts...' without immediately connecting it to a key finding fails this rubric. A direct opening like 'Before we dig in — the primary CTA contrast fails WCAG AA' passes."
+          }
+        },
+        {
+          "rubric_id": "priority_verdict",
+          "rubric_content": {
+            "text_property": "The critique MUST conclude with a clear prioritization verdict distinguishing ship-blocking issues from post-launch polish. Look for language like 'Ship-blocking:', 'Ready to ship', 'Post-launch polish:', or equivalent phrasing that categorizes which issues must be fixed before shipping vs. which can wait. A response that lists issues without any prioritization verdict fails this rubric."
+          }
+        },
+        {
+          "rubric_id": "impact_before_rules",
+          "rubric_content": {
+            "text_property": "For each identified issue, the user impact or consequence MUST be stated before or alongside the rule citation. It is not acceptable to only say 'This violates WCAG SC 1.4.3' — the response must explain what a real user experiences because of this problem (e.g. 'A low-vision user cannot read this button label at 2.3:1 contrast — below the 4.5:1 AA minimum'). Issues that cite only the rule without the user consequence fail this rubric."
+          }
+        }
+      ]
+    }
+  }
+}

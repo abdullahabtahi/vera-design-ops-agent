@@ -1,0 +1,65 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - button "Collapse sidebar" [ref=e4]:
+        - img [ref=e5]
+      - generic [ref=e7]:
+        - img [ref=e9]
+        - generic [ref=e12]:
+          - paragraph [ref=e13]: Vera
+          - paragraph [ref=e14]: Design Ops Agent
+      - button "New critique" [ref=e16]:
+        - img [ref=e17]
+        - text: New critique
+      - navigation [ref=e19]:
+        - link "Critique" [ref=e20] [cursor=pointer]:
+          - /url: /
+          - img [ref=e21]
+          - generic [ref=e23]: Critique
+        - link "Playbooks" [ref=e24] [cursor=pointer]:
+          - /url: /playbooks
+          - img [ref=e25]
+          - generic [ref=e27]: Playbooks
+        - link "Evidence" [ref=e28] [cursor=pointer]:
+          - /url: /history
+          - img [ref=e29]
+          - generic [ref=e33]: Evidence
+        - link "Activity" [ref=e35] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e36]
+          - generic [ref=e37]: Activity
+        - link "Knowledge" [ref=e38] [cursor=pointer]:
+          - /url: /knowledge
+          - img [ref=e39]
+          - generic [ref=e41]: Knowledge
+      - generic [ref=e43]:
+        - link "No sessions yet Dashboard →" [ref=e45] [cursor=pointer]:
+          - /url: /dashboard
+          - generic [ref=e46]: No sessions yet
+          - generic [ref=e47]: Dashboard →
+        - button "Add Figma token" [ref=e49]:
+          - img [ref=e50]
+          - generic [ref=e53]: Add Figma token
+    - main [ref=e54]:
+      - generic [ref=e55]:
+        - paragraph [ref=e57]: Evidence Log
+        - generic [ref=e58]:
+          - generic [ref=e59]:
+            - heading "Design evidence log" [level=1] [ref=e60]
+            - paragraph [ref=e61]: A living record of every critique — issues found, what works, and how your designs evolve.
+          - generic [ref=e62]:
+            - img [ref=e64]
+            - paragraph [ref=e67]: No critiques yet
+            - paragraph [ref=e68]:
+              - text: Run your first critique from the
+              - button "Critique" [ref=e69]
+              - text: or
+              - button "Playbooks" [ref=e70]
+              - text: page.
+  - button "Open Next.js Dev Tools" [ref=e76] [cursor=pointer]:
+    - img [ref=e77]
+  - alert [ref=e80]
+```

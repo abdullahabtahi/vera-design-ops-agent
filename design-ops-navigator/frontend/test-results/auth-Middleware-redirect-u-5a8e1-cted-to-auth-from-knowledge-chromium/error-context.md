@@ -1,0 +1,198 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - button "Collapse sidebar" [ref=e4]:
+        - img [ref=e5]
+      - generic [ref=e7]:
+        - img [ref=e9]
+        - generic [ref=e12]:
+          - paragraph [ref=e13]: Vera
+          - paragraph [ref=e14]: Design Ops Agent
+      - button "New critique" [ref=e16]:
+        - img [ref=e17]
+        - text: New critique
+      - navigation [ref=e19]:
+        - link "Critique" [ref=e20] [cursor=pointer]:
+          - /url: /
+          - img [ref=e21]
+          - generic [ref=e23]: Critique
+        - link "Playbooks" [ref=e24] [cursor=pointer]:
+          - /url: /playbooks
+          - img [ref=e25]
+          - generic [ref=e27]: Playbooks
+        - link "Evidence" [ref=e28] [cursor=pointer]:
+          - /url: /history
+          - img [ref=e29]
+          - generic [ref=e33]: Evidence
+        - link "Activity" [ref=e34] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e35]
+          - generic [ref=e36]: Activity
+        - link "Knowledge" [ref=e37] [cursor=pointer]:
+          - /url: /knowledge
+          - img [ref=e38]
+          - generic [ref=e40]: Knowledge
+      - generic [ref=e43]:
+        - link "No sessions yet Dashboard →" [ref=e45] [cursor=pointer]:
+          - /url: /dashboard
+          - generic [ref=e46]: No sessions yet
+          - generic [ref=e47]: Dashboard →
+        - button "Add Figma token" [ref=e49]:
+          - img [ref=e50]
+          - generic [ref=e53]: Add Figma token
+    - main [ref=e54]:
+      - generic [ref=e56]:
+        - generic [ref=e57]:
+          - generic [ref=e58]:
+            - heading "Knowledge Base" [level=1] [ref=e59]
+            - paragraph [ref=e60]: 8 built-in · 4 team-uploaded
+          - button "Refresh" [ref=e61]:
+            - img [ref=e62]
+            - text: Refresh
+        - generic [ref=e67]:
+          - heading "Add from URL" [level=2] [ref=e68]
+          - paragraph [ref=e69]: Paste any public design doc, guidelines page, or article — fetched via Jina Reader
+          - generic [ref=e70]:
+            - generic [ref=e71]:
+              - generic [ref=e72]:
+                - img [ref=e73]
+                - textbox "https://developer.apple.com/design/human-interface-guidelines" [ref=e76]
+              - button "Ingest URL" [disabled] [ref=e77]
+            - generic [ref=e78]:
+              - textbox "Source name (e.g. Apple HIG)" [ref=e79]
+              - combobox [ref=e80]:
+                - option "Web Resource" [selected]
+                - option "Design System"
+                - option "Accessibility"
+                - option "Usability"
+                - option "Team Docs"
+        - generic [ref=e81]:
+          - heading "Upload Team Document" [level=2] [ref=e82]
+          - generic [ref=e83]:
+            - generic [ref=e84]:
+              - textbox "Source name (optional — auto from filename)" [ref=e85]
+              - combobox [ref=e86]:
+                - option "Team Docs" [selected]
+                - option "Design System"
+                - option "Brand Guidelines"
+                - option "Accessibility"
+                - option "Research"
+            - generic [ref=e87] [cursor=pointer]:
+              - generic [ref=e88]:
+                - img [ref=e89]
+                - img [ref=e92]
+                - img [ref=e95]
+              - generic [ref=e99]:
+                - paragraph [ref=e100]: Drop file or click to upload
+                - paragraph [ref=e101]: PDF, PNG, JPEG, WEBP, GIF · Max 20 MB
+        - generic [ref=e102]:
+          - heading "Team DocumentsTier 2" [level=2] [ref=e103]
+          - paragraph [ref=e104]: Embedded with gemini-embedding-2-preview · searched alongside Tier 1 on every critique
+          - generic [ref=e105]:
+            - generic [ref=e106]:
+              - generic [ref=e107]:
+                - img [ref=e108]
+                - generic [ref=e112]:
+                  - paragraph [ref=e113]: Color Guidance
+                  - paragraph [ref=e114]: Color Guidance.png · 1 chunk
+              - generic [ref=e115]:
+                - generic [ref=e116]: Team Docs
+                - button "Delete source" [ref=e117]:
+                  - img [ref=e118]
+            - generic [ref=e121]:
+              - generic [ref=e122]:
+                - img [ref=e123]
+                - generic [ref=e126]:
+                  - paragraph [ref=e127]: UX Psychology
+                  - paragraph [ref=e128]: https://www.nngroup.com/articles/psychology-study-guide/ · 13 chunks
+              - generic [ref=e129]:
+                - generic [ref=e130]: Web Resource
+                - button "Delete source" [ref=e131]:
+                  - img [ref=e132]
+            - generic [ref=e135]:
+              - generic [ref=e136]:
+                - img [ref=e137]
+                - generic [ref=e140]:
+                  - paragraph [ref=e141]: Climatepulse Design Principles
+                  - paragraph [ref=e142]: ClimatePulse Design Principles.pdf · 3 chunks
+              - generic [ref=e143]:
+                - generic [ref=e144]: Team Docs
+                - button "Delete source" [ref=e145]:
+                  - img [ref=e146]
+            - generic [ref=e149]:
+              - generic [ref=e150]:
+                - img [ref=e151]
+                - generic [ref=e154]:
+                  - paragraph [ref=e155]: Codewave Princples
+                  - paragraph [ref=e156]: https://codewave.com/insights/transform-ux-design-principles/ · 16 chunks
+              - generic [ref=e157]:
+                - generic [ref=e158]: Web Resource
+                - button "Delete source" [ref=e159]:
+                  - img [ref=e160]
+        - generic [ref=e163]:
+          - heading "Built-in UX RulesTier 1 · read-only" [level=2] [ref=e164]
+          - paragraph [ref=e165]: Pre-loaded · embedded with gemini-embedding-001 · always searched
+          - generic [ref=e166]:
+            - generic [ref=e167]:
+              - generic [ref=e168]:
+                - paragraph [ref=e169]: HCI Research / UX Laws
+                - paragraph [ref=e170]: Evidence-based principles from cognitive psychology applied to user interface design.
+              - generic [ref=e171]:
+                - generic [ref=e172]: Cognitive Psychology
+                - img [ref=e173]
+            - generic [ref=e176]:
+              - generic [ref=e177]:
+                - paragraph [ref=e178]: Form Design Best Practices
+                - paragraph [ref=e179]: Evidence-based guidelines for designing accessible, usable forms. Forms are the highest-friction element in most UIs — poor form design dire
+              - generic [ref=e180]:
+                - generic [ref=e181]: Interaction Design
+                - img [ref=e182]
+            - generic [ref=e185]:
+              - generic [ref=e186]:
+                - paragraph [ref=e187]: Gestalt Psychology
+                - paragraph [ref=e188]: Gestalt principles describe how humans perceive visual elements as unified wholes.
+              - generic [ref=e189]:
+                - generic [ref=e190]: Visual Design
+                - img [ref=e191]
+            - generic [ref=e194]:
+              - generic [ref=e195]:
+                - paragraph [ref=e196]: UI Interaction Patterns
+                - paragraph [ref=e197]: Evidence-based interaction patterns for common UI components. Based on ARIA Authoring Practices Guide (APG), WCAG 2.2, and NN/g research.
+              - generic [ref=e198]:
+                - generic [ref=e199]: Interaction Design
+                - img [ref=e200]
+            - generic [ref=e203]:
+              - generic [ref=e204]:
+                - paragraph [ref=e205]: Material Design 3
+                - paragraph [ref=e206]: Google's open-source design system. M3 introduces dynamic color, updated components, and accessibility improvements.
+              - generic [ref=e207]:
+                - generic [ref=e208]: Design System
+                - img [ref=e209]
+            - generic [ref=e212]:
+              - generic [ref=e213]:
+                - paragraph [ref=e214]: Nielsen Norman Group
+                - paragraph [ref=e215]: Jakob Nielsen's 10 general principles for interaction design. Use these as heuristics for evaluation, not strict guidelines.
+              - generic [ref=e216]:
+                - generic [ref=e217]: Usability
+                - img [ref=e218]
+            - generic [ref=e221]:
+              - generic [ref=e222]:
+                - paragraph [ref=e223]: Typography Best Practices for UI
+                - paragraph [ref=e224]: Evidence-based guidelines for readable, accessible, and hierarchically clear typography in digital interfaces.
+              - generic [ref=e225]:
+                - generic [ref=e226]: Visual Design
+                - img [ref=e227]
+            - generic [ref=e230]:
+              - generic [ref=e231]:
+                - paragraph [ref=e232]: WCAG 2.2
+                - paragraph [ref=e233]: W3C Web Content Accessibility Guidelines 2.2. Meet AA minimum for all digital products.
+              - generic [ref=e234]:
+                - generic [ref=e235]: Accessibility
+                - img [ref=e236]
+  - button "Open Next.js Dev Tools" [ref=e244] [cursor=pointer]:
+    - img [ref=e245]
+  - alert [ref=e248]
+```

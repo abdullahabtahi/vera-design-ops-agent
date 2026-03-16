@@ -1,0 +1,65 @@
+{
+  "eval_set_id": "critique_quality",
+  "name": "Route A — Figma Critique Pipeline Quality",
+  "description": "End-to-end tests for the Figma critique pipeline. Each case uses a real Figma URL. The eval checks that the full pipeline runs (RAG + Figma fetch + critic + synthesis) and produces a structured, grounded critique. IMPORTANT: Replace FIGMA_URL placeholders with real accessible Figma frame URLs before running. Format: https://www.figma.com/design/FILE_KEY/Name?node-id=NODE_ID",
+  "eval_cases": [
+    {
+      "eval_id": "login_screen_critique",
+      "conversation": [
+        {
+          "invocation_id": "inv_1",
+          "user_content": {
+            "parts": [
+              {
+                "text": "Please critique this Figma design: REPLACE_WITH_YOUR_FIGMA_URL\n\nProject context: Mobile login screen for a healthcare app. Primary user is 55+ age group. Goal: reduce login friction and increase trust."
+              }
+            ]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              { "name": "search_knowledge_base", "args": { "query": "accessibility mobile login form" } },
+              { "name": "get_figma_node_tree", "args": {} },
+              { "name": "get_figma_frame_image", "args": {} },
+              { "name": "get_critique_schema", "args": {} },
+              { "name": "parse_critique_json", "args": {} }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "design_ops_navigator",
+        "user_id": "eval_user",
+        "state": {}
+      }
+    },
+    {
+      "eval_id": "dashboard_critique",
+      "conversation": [
+        {
+          "invocation_id": "inv_1",
+          "user_content": {
+            "parts": [
+              {
+                "text": "Critique this design: REPLACE_WITH_YOUR_FIGMA_URL"
+              }
+            ]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              { "name": "search_knowledge_base", "args": { "query": "dashboard data visualization UX" } },
+              { "name": "get_figma_node_tree", "args": {} },
+              { "name": "get_figma_frame_image", "args": {} },
+              { "name": "get_critique_schema", "args": {} },
+              { "name": "parse_critique_json", "args": {} }
+            ]
+          }
+        }
+      ],
+      "session_input": {
+        "app_name": "design_ops_navigator",
+        "user_id": "eval_user",
+        "state": {}
+      }
+    }
+  ]
+}

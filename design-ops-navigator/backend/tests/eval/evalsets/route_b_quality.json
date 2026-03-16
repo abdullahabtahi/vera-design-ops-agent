@@ -1,0 +1,154 @@
+{
+  "eval_set_id": "route_b_quality",
+  "name": "Route B — UX Knowledge Quality",
+  "description": "Tests citation accuracy, actionability, and grounding for general UX questions (no Figma URL). These are the questions a Google UX Director would ask.",
+  "eval_cases": [
+    {
+      "eval_id": "contrast_specificity",
+      "conversation": [
+        {
+          "invocation_id": "inv_1",
+          "user_content": {
+            "parts": [{ "text": "Our login button has #A8A8A8 text on #FFFFFF white. Is this accessible and what exactly do we need to change?" }]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [{ "text": "This fails WCAG 2.2 SC 1.4.3 (Contrast Minimum, AA). The contrast ratio of #A8A8A8 on #FFFFFF is approximately 2.32:1, which is below the 4.5:1 minimum for normal text. Change the text color to #767676 or darker to achieve 4.54:1 (AA pass). For a stronger result, use #595959 (7.0:1, AAA pass)." }]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              { "name": "search_knowledge_base", "args": { "query": "contrast ratio WCAG text accessibility" } }
+            ]
+          }
+        }
+      ],
+      "session_input": { "app_name": "design_ops_navigator", "user_id": "eval_user", "state": {} }
+    },
+    {
+      "eval_id": "touch_target_precision",
+      "conversation": [
+        {
+          "invocation_id": "inv_1",
+          "user_content": {
+            "parts": [{ "text": "What is the minimum touch target size for mobile buttons? Give me the exact numbers." }]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [{ "text": "WCAG 2.2 SC 2.5.8 (Target Size Minimum, AA) requires 24x24 CSS pixels minimum. Material Design 3 and Apple HIG both recommend 44x44pt/dp as the comfortable minimum. Fitts's Law supports the larger target: a 44x44px tap target reduces error rates for thumbs, especially for users with motor impairments." }]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              { "name": "search_knowledge_base", "args": { "query": "touch target size mobile accessibility" } }
+            ]
+          }
+        }
+      ],
+      "session_input": { "app_name": "design_ops_navigator", "user_id": "eval_user", "state": {} }
+    },
+    {
+      "eval_id": "multi_topic_onboarding",
+      "conversation": [
+        {
+          "invocation_id": "inv_1",
+          "user_content": {
+            "parts": [{ "text": "We are designing a 7-step onboarding form. What cognitive load principles should we follow?" }]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [{ "text": "Apply Miller's Law (7±2 chunks): break into ≤7 steps and group related fields. Apply Hick's Law: minimize choices per step — never more than 3-4 options on a single screen. Apply progressive disclosure: show only what is necessary for the current step. According to Nielsen Heuristic #1 (Visibility of System Status): always show a progress indicator. According to Nielsen Heuristic #3 (User Control): allow stepping backward without data loss." }]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              { "name": "search_knowledge_base", "args": { "query": "cognitive load multi-step form design" } }
+            ]
+          }
+        }
+      ],
+      "session_input": { "app_name": "design_ops_navigator", "user_id": "eval_user", "state": {} }
+    },
+    {
+      "eval_id": "no_fabrication_test",
+      "conversation": [
+        {
+          "invocation_id": "inv_1",
+          "user_content": {
+            "parts": [{ "text": "What does WCAG say about animation and motion for users with vestibular disorders?" }]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [{ "text": "WCAG 2.2 SC 2.3.3 (Animation from Interactions, AAA) requires that motion animation triggered by interaction can be disabled, unless animation is essential. SC 2.3.1 (Three Flashes or Below Threshold, A) prohibits content that flashes more than 3 times per second. Use the prefers-reduced-motion CSS media query to honor system-level motion preferences." }]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              { "name": "search_knowledge_base", "args": { "query": "animation motion vestibular WCAG" } }
+            ]
+          }
+        }
+      ],
+      "session_input": { "app_name": "design_ops_navigator", "user_id": "eval_user", "state": {} }
+    },
+    {
+      "eval_id": "opinionated_premise_challenge",
+      "conversation": [
+        {
+          "invocation_id": "inv_1",
+          "user_content": {
+            "parts": [{ "text": "Should I use a hamburger menu on mobile?" }]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [{ "text": "For most apps: no. The hamburger menu hides navigation, which increases task time and reduces feature discovery — multiple studies show 20-30% drop in navigation engagement when primary actions are hidden behind a hamburger. The real question is how many top-level destinations you have. If 5 or fewer: use a tab bar (iOS) or bottom navigation (Android) — both keep core actions visible and within thumb reach per Fitts's Law. If you have more destinations or secondary flows: use a hamburger for overflow only, never for primary navigation." }]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              { "name": "search_knowledge_base", "args": { "query": "hamburger menu mobile navigation patterns" } }
+            ]
+          }
+        }
+      ],
+      "session_input": { "app_name": "design_ops_navigator", "user_id": "eval_user", "state": {} }
+    },
+    {
+      "eval_id": "director_voice_form_errors",
+      "conversation": [
+        {
+          "invocation_id": "inv_1",
+          "user_content": {
+            "parts": [{ "text": "How should we handle form validation errors in our checkout flow?" }]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [{ "text": "Inline, immediate, and specific — those are the three non-negotiables. Inline: errors appear next to the field that caused them, not in a banner at the top. Immediate: validate on blur (when the user leaves a field), not on submit. Specific: 'Enter a valid email address' not 'Invalid input'. Nielsen Heuristic #9 (Help users recognize, diagnose, and recover) requires that errors explain what went wrong and how to fix it. WCAG 2.2 SC 3.3.1 requires that input errors are identified and described in text — not just color. The biggest mistake teams make is submit-time validation with a generic 'Please fix the errors above' message: users have moved on mentally and have to re-orient to find the problem." }]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              { "name": "search_knowledge_base", "args": { "query": "form validation error handling UX" } }
+            ]
+          }
+        }
+      ],
+      "session_input": { "app_name": "design_ops_navigator", "user_id": "eval_user", "state": {} }
+    },
+    {
+      "eval_id": "tier2_knowledge_retrieval",
+      "conversation": [
+        {
+          "invocation_id": "inv_1",
+          "user_content": {
+            "parts": [{ "text": "What does the Codewave article say about visual hierarchy in UX design?" }]
+          },
+          "final_response": {
+            "role": "model",
+            "parts": [{ "text": "According to the Codewave design principles document" }]
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              { "name": "search_knowledge_base", "args": { "query": "visual hierarchy Codewave" } }
+            ]
+          }
+        }
+      ],
+      "session_input": { "app_name": "design_ops_navigator", "user_id": "eval_user", "state": {} }
+    }
+  ]
+}

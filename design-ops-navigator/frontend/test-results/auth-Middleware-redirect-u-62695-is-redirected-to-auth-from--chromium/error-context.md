@@ -1,0 +1,114 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - button "Collapse sidebar" [ref=e4]:
+        - img [ref=e5]
+      - generic [ref=e7]:
+        - img [ref=e9]
+        - generic [ref=e12]:
+          - paragraph [ref=e13]: Vera
+          - paragraph [ref=e14]: Design Ops Agent
+      - button "New critique" [ref=e16]:
+        - img [ref=e17]
+        - text: New critique
+      - navigation [ref=e19]:
+        - link "Critique" [ref=e20] [cursor=pointer]:
+          - /url: /
+          - img [ref=e21]
+          - generic [ref=e23]: Critique
+        - link "Playbooks" [ref=e25] [cursor=pointer]:
+          - /url: /playbooks
+          - img [ref=e26]
+          - generic [ref=e28]: Playbooks
+        - link "Evidence" [ref=e29] [cursor=pointer]:
+          - /url: /history
+          - img [ref=e30]
+          - generic [ref=e34]: Evidence
+        - link "Activity" [ref=e35] [cursor=pointer]:
+          - /url: /dashboard
+          - img [ref=e36]
+          - generic [ref=e37]: Activity
+        - link "Knowledge" [ref=e38] [cursor=pointer]:
+          - /url: /knowledge
+          - img [ref=e39]
+          - generic [ref=e41]: Knowledge
+      - generic [ref=e43]:
+        - link "No sessions yet Dashboard →" [ref=e45] [cursor=pointer]:
+          - /url: /dashboard
+          - generic [ref=e46]: No sessions yet
+          - generic [ref=e47]: Dashboard →
+        - button "Add Figma token" [ref=e49]:
+          - img [ref=e50]
+          - generic [ref=e53]: Add Figma token
+    - main [ref=e54]:
+      - generic [ref=e56]:
+        - generic [ref=e57]:
+          - paragraph [ref=e58]: New critique
+          - generic [ref=e59]:
+            - button "No project" [ref=e61]:
+              - generic [ref=e62]: No project
+            - generic [ref=e65]: Ready
+        - button "Add project context (optional)" [ref=e67]:
+          - img [ref=e68]
+          - img [ref=e70]
+          - text: Add project context (optional)
+        - button "Add design URL (optional)" [ref=e75]:
+          - img [ref=e76]
+          - text: Add design URL (optional)
+        - generic [ref=e79]:
+          - img [ref=e81]
+          - generic [ref=e84]:
+            - paragraph [ref=e85]: Connect your Figma account
+            - paragraph [ref=e86]: Add your Personal Access Token to critique Figma designs directly. Get it from Figma → Settings → Security → Personal access tokens.
+            - generic [ref=e87]:
+              - textbox "figd_…" [active] [ref=e88]
+              - button "Connect" [disabled] [ref=e89]
+              - button "Skip" [ref=e90]
+        - generic [ref=e92]:
+          - generic [ref=e94]:
+            - generic [ref=e95]:
+              - heading "Evidence-based UX critique" [level=2] [ref=e96]
+              - paragraph [ref=e97]: Paste a screenshot or add a Figma URL above — get grounded feedback with rule citations and actionable fixes.
+            - generic [ref=e98]:
+              - generic [ref=e99]:
+                - img [ref=e100]
+                - generic [ref=e106]:
+                  - paragraph [ref=e107]: WCAG 2.2
+                  - paragraph [ref=e108]: Contrast, focus, alt-text
+              - generic [ref=e109]:
+                - img [ref=e110]
+                - generic [ref=e113]:
+                  - paragraph [ref=e114]: Gestalt
+                  - paragraph [ref=e115]: Visual hierarchy & grouping
+              - generic [ref=e116]:
+                - img [ref=e117]
+                - generic [ref=e121]:
+                  - paragraph [ref=e122]: Nielsen
+                  - paragraph [ref=e123]: 10 usability heuristics
+              - generic [ref=e124]:
+                - img [ref=e125]
+                - generic [ref=e133]:
+                  - paragraph [ref=e134]: Cognitive
+                  - paragraph [ref=e135]: Fitts, Hick, Miller laws
+            - generic [ref=e136]:
+              - paragraph [ref=e137]: Try asking
+              - generic [ref=e138]:
+                - button "What accessibility issues does this design have?" [ref=e139]
+                - button "Check the contrast ratios on this frame" [ref=e140]
+                - button "Does this layout follow Gestalt principles?" [ref=e141]
+                - button "What are the cognitive load concerns here?" [ref=e142]
+                - button "Explain WCAG 1.4.3 contrast requirements" [ref=e143]
+          - generic [ref=e144]:
+            - generic [ref=e145]:
+              - button "Attach screenshot" [ref=e146]:
+                - img [ref=e147]
+              - textbox "Ask about accessibility, layout, Gestalt… or paste a screenshot" [ref=e149]
+              - button "Send" [disabled] [ref=e150]
+            - paragraph [ref=e151]: Paste image with ⌘V · Drag & drop · Shift+Enter for new line
+  - button "Open Next.js Dev Tools" [ref=e157] [cursor=pointer]:
+    - img [ref=e158]
+  - alert [ref=e161]
+```
