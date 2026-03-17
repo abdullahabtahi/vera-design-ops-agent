@@ -23,7 +23,7 @@ Paste a Figma URL (or any website URL). Vera fetches the design, grounds it in W
 
 - **Problem** — Manual UX critique takes hours, requires a senior researcher, and rarely happens early enough — most teams discover accessibility failures in QA, not design review.
 - **Solution** — A UI Navigator agent that *sees* Figma frames and live websites via Gemini 2.5 Flash vision, then grounds critique in WCAG / Nielsen / Gestalt — no text description of the design needed. Paste a URL, get a severity-ranked report in seconds.
-- **Impact** — Expert-level UX feedback on demand. Design → critique in under 10 seconds. Any designer, any Figma file, any live URL.
+- **Impact** — Expert-level UX feedback on demand. Design → critique in under minutes. Any designer, any Figma file, any live URL.
 - **Technically novel** — 5-agent ADK pipeline (Sequential + Parallel) · dual-tier RAG with BM25+RRF+MMR reranking · Constitutional self-critique loop (SELF-REFINE, Madaan NeurIPS 2023) · RLVR verifiable reward checks on every contrast claim.
 - **Evaluated** — ADK rubric-based eval, Gemini LLM-as-judge: Route B 0.833/1.0 ✅ · Route A 1.0/1.0 ✅ · 0.875/1.0 ✅ · reproduced with `adk eval`, not cherry-picked runs.
 
