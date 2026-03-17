@@ -166,6 +166,61 @@ This is intentionally lightweight. Cold-start is real: a new workspace gets no p
 
 ---
 
+## Research Foundations
+
+Each design decision in the pipeline maps to a published research result.
+
+| Research Area | Source | What it does in Vera |
+|---|---|---|
+| **Constitutional AI + SELF-REFINE** | Bai et al. (Anthropic, 2022) · Madaan et al. (NeurIPS 2023) | `self_critic_agent` checks the first-draft critique against 8 quality rules. `critic_revision_agent` fixes only what's flagged — and **skips entirely** if nothing is. SELF-REFINE applied to critique quality: generate, reflect, revise only when needed. |
+| **RLVR — Verifiable Rewards** | DeepSeek-R1 (2024) · CRITIC | `compute_contrast_ratio()` runs before any response leaves the system. If the model claims 2.3:1 and the math says 3.1:1, the claim is suppressed. Fixes without a measurement token (`#hex`, `px`, `rem`, `:1`) are rejected outright — deterministic, no LLM judgment. |
+| **Hybrid BM25 + RRF + MMR** | Robertson & Zaragoza (2009) · Cormack et al. (2009) · Carbonell & Goldstein (1998) | Dense vector search captures meaning; BM25 boosts exact-term matches (WCAG SC numbers, Hick's Law, law names). Reciprocal Rank Fusion merges both rankings without normalization. MMR filters for coverage: top-5 chunks span different principles, not the same WCAG section five ways. |
+| **Contextual Chunk Headers** | Anthropic research (2024) | Each knowledge chunk is embedded with a domain prefix ("Source: WCAG 2.2 \| Category: Accessibility"). Anthropic showed a 49% reduction in retrieval failure on vague queries with this approach. |
+| **Implicit Preference Signals** | Christiano et al. (RLHF, 2017) · Corrective RAG | Fixed / In Progress / Won't Fix clicks write to Firestore. On the next critique for the same workspace, consistently-actioned rules are injected into the Gemini reranking prompt. No labels, no training loop — signal comes from the natural design workflow. |
+| **LLM-as-Judge** | Zheng et al. (MT-Bench, 2023) | After each session, a background task scores the critique on 4 dimensions using Gemini as evaluator. Scores feed the Activity dashboard and the formal ADK eval reported below. |
+
+### How they compose in the pipeline
+
+```
+Figma frame + node tree  (or website screenshot via Playwright)
+        │
+        ▼
+  parallel_research
+  ├── [Retriever]  ── Hybrid BM25 + RRF → top-20 → MMR → top-5
+  │                   Contextual headers preserve domain signal per chunk
+  └── [Figma Fetcher]  ── node tree · styles · components
+        │
+        ▼
+  [Critic]  ── multimodal: inline PNG + retrieved_knowledge + figma_context
+             ── RLVR: compute_contrast_ratio() on every hex pair mentioned
+             ── rejects fixes without measurement tokens (#hex · px · rem · :1)
+        │
+        ▼
+  [Self-Critic]  ── Constitutional QA: 8-rule check
+  [Revision]     ── skip callback fires if revision_needed: false  (zero LLM cost)
+        │
+        ▼
+  [Synthesis]  ── design-director voice · severity badges · ship/hold verdict · SSE stream
+        │
+        ▼  (background · non-blocking)
+  [LLM-as-Judge]  ── 4-dimension auto-eval → Firestore → Activity dashboard
+                                    ↑
+               [Implicit Preference Signals]
+               Fixed / Won't Fix → rerank injection on next session
+```
+
+### Verified — feature-level test coverage
+
+| Feature | What the tests verify | Tests |
+|---|---|---|
+| RLVR quality gates | Vague fix detection, measurement token enforcement, issue inflation (8+ issues), monotone citation (70%+ same rule), clean reports pass without warnings | 7 |
+| Constitutional QA | `self_critic_agent` present in pipeline, `critic_revision_agent` present, skip callback fires on clean reports, graceful fallback on malformed revision feedback | 4 |
+| RAG personalization | Empty workspace → no injection, 5-min TTL cache hit, Firestore errors handled gracefully, team preferences injected into Gemini reranking | 4 |
+| LLM-as-Judge auto-eval | Background task handles missing session/report gracefully, writes eval scores to Firestore on success, eval scores endpoint returns correct structure | 4 |
+| Feedback endpoint | Status validation (Fixed / In Progress / Won't Fix only), Firestore best-effort error handling | 2 |
+
+---
+
 ## Eval Results
 
 Vera is evaluated using **Google ADK's rubric-based eval framework** — no cherry-picked demos.
