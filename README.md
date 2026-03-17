@@ -114,10 +114,10 @@ flowchart LR
     J --> S1[0 or 1]
     J --> S2[0 or 1]
     J --> Sn[0 or 1]
-    S1 & S2 & Sn --> M["mean score"]
-    M --> T{≥ threshold?}
-    T -->|yes| P([✅ PASS])
-    T -->|no|  F([❌ FAIL])
+    S1 & S2 & Sn --> M[mean score]
+    M --> T{above threshold?}
+    T -->|yes| P([PASS])
+    T -->|no|  F([FAIL])
 ```
 
 ### Score overview

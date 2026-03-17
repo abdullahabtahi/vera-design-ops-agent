@@ -50,8 +50,10 @@ angles += angles[:1]  # close the polygon
 c1 = case1 + case1[:1]
 c2 = case2 + case2[:1]
 
-fig = plt.figure(figsize=(9, 8), facecolor=BG)
+fig = plt.figure(figsize=(10, 10), facecolor=BG)
 ax  = fig.add_subplot(111, polar=True, facecolor=BG)
+# Reserve space at bottom for legend
+fig.subplots_adjust(bottom=0.22, top=0.88)
 
 # Grid rings
 for r in [0.25, 0.5, 0.75, 1.0]:
@@ -86,33 +88,32 @@ ax.fill(angles, c2, color=CASE2_C, alpha=0.12, zorder=3)
 ax.scatter(angles[:-1], case1, s=55, color=CASE1_C, zorder=5, edgecolors=BG, linewidths=1.2)
 ax.scatter(angles[:-1], case2, s=55, color=CASE2_C, zorder=5, edgecolors=BG, linewidths=1.2)
 
-# Labels
+# Labels — extra pad so they don't crowd the chart edge
 ax.set_xticks(angles[:-1])
-ax.set_xticklabels(labels, size=9, color=TEXT, fontfamily="sans-serif")
-ax.tick_params(axis="x", pad=14)
+ax.set_xticklabels(labels, size=9.5, color=TEXT, fontfamily="sans-serif")
+ax.tick_params(axis="x", pad=18)
 ax.set_yticklabels([])
-ax.set_ylim(0, 1.15)
+ax.set_ylim(0, 1.2)
 ax.spines["polar"].set_visible(False)
 
-# Legend
+# Legend — placed in figure coords below the polar axes
 leg = [
     mpatches.Patch(facecolor=CASE1_C, alpha=0.7,
-                   label="Case 1 — Climate dashboard  (score 1.0 / 1.0)"),
+                   label="Case 1 — ClimatePulse dashboard  (1.0 / 1.0)"),
     mpatches.Patch(facecolor=CASE2_C, alpha=0.7,
-                   label="Case 2 — same design, minimal context  (score 0.875 / 1.0)"),
+                   label="Case 2 — minimal context run  (0.875 / 1.0)"),
     mpatches.Patch(facecolor=THRESH_C, alpha=0.7,
                    label="Pass threshold  (0.7)"),
 ]
-ax.legend(handles=leg, loc="lower center", bbox_to_anchor=(0.5, -0.14),
-          ncol=1, fontsize=8.5, frameon=False,
-          labelcolor=TEXT, handlelength=1.2)
+fig.legend(handles=leg, loc="lower center", bbox_to_anchor=(0.5, 0.02),
+           ncol=1, fontsize=9, frameon=False,
+           labelcolor=TEXT, handlelength=1.4, handleheight=1.2)
 
 fig.suptitle(
-    "Route A — Figma Critique Pipeline\nRubric Scores (LLM-as-Judge · Gemini)",
-    fontsize=12, color=TEXT, y=1.01, fontweight="semibold"
+    "Route A — Figma Critique Pipeline\nRubric Scores  (LLM-as-Judge · Gemini)",
+    fontsize=13, color=TEXT, fontweight="semibold", y=0.97
 )
 
-plt.tight_layout()
 fig.savefig(OUT / "eval_radar.png", dpi=160, bbox_inches="tight",
             facecolor=BG, edgecolor="none")
 plt.close(fig)
