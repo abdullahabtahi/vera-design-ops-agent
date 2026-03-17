@@ -129,7 +129,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins.split(","),
     allow_methods=["GET", "POST", "DELETE"],
-    allow_headers=["Content-Type", "Authorization", "X-Session-Id"],
+    allow_headers=["Content-Type", "Authorization", "X-Session-Id", "X-Figma-Token"],
 )
 
 # In-memory session service (swap for Firestore in production)

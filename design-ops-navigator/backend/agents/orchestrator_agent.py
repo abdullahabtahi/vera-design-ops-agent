@@ -60,8 +60,13 @@ async def _init_pipeline_context(callback_context: CallbackContext) -> None:
     raw_text = callback_context.state.get("_user_message", "")
     if not raw_text:
         # Scan string state values for directive keywords as a fallback
+        # ADK State._value is the underlying dict; .values() is not on the State proxy
+        try:
+            _state_dict = callback_context.state._value
+        except AttributeError:
+            _state_dict = {}
         raw_text = " ".join(
-            str(v) for v in callback_context.state.values() if isinstance(v, str)
+            str(v) for v in _state_dict.values() if isinstance(v, str)
         )
 
     if _TIER2_ONLY_PATTERNS.search(raw_text):
