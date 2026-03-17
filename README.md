@@ -101,37 +101,59 @@ Retrieval: top-20 fetch → **hybrid BM25 + RRF reranking** → top-5 returned. 
 
 Vera is evaluated using **Google ADK's rubric-based eval framework** — no cherry-picked demos.
 
-### Route B — UX Knowledge (7 test cases)
+### How it works
 
-| Metric | Score | Threshold | Status |
-|--------|-------|-----------|--------|
-| `rubric_based_final_response_quality_v1` | **0.83 / 1.0** | 0.8 | ✅ PASS |
+Each response is judged by Gemini against atomic binary rubrics (0 or 1 per rubric). The final score is the mean across rubrics. No reference answer required — the judge reads the rubric spec and the agent's output.
 
-Rubrics tested: grounded citations · actionable specificity · no hallucination · professional tone · director voice · impact connected
+```mermaid
+flowchart LR
+    A([Agent response]) --> J[Gemini Judge]
+    R1([Rubric 1]) --> J
+    R2([Rubric 2]) --> J
+    Rn([... N rubrics]) --> J
+    J --> S1[0 or 1]
+    J --> S2[0 or 1]
+    J --> Sn[0 or 1]
+    S1 & S2 & Sn --> M["mean score"]
+    M --> T{≥ threshold?}
+    T -->|yes| P([✅ PASS])
+    T -->|no|  F([❌ FAIL])
+```
 
-All 7 cases passed.
+### Score overview
 
-### Route A — Figma Critique Pipeline (2 test cases)
+![Eval summary — Route B and Route A scores](research/public/eval_summary.png)
 
-| Metric | Score | Threshold | Status |
-|--------|-------|-----------|--------|
-| `rubric_based_final_response_quality_v1` (case 1) | **1.0 / 1.0** | 0.7 | ✅ PASS |
-| `rubric_based_final_response_quality_v1` (case 2) | **0.875 / 1.0** | 0.7 | ✅ PASS |
+### Route B — UX Knowledge (7 test cases, threshold 0.8)
 
-Individual rubric breakdown (case 1 — all 8 rubrics: 1.0):
+| Metric | Score | Status |
+|--------|-------|--------|
+| `rubric_based_final_response_quality_v1` | **0.833 / 1.0** | ✅ PASS |
 
-| Rubric | Score |
-|--------|-------|
-| Critique structure (severity labels, What's Working section) | 1.0 |
-| Rule citations (WCAG SC number, Nielsen, Gestalt, Cognitive Laws) | 1.0 |
-| Actionable fixes (hex values, px/rem values, contrast ratios) | 1.0 |
-| Visual grounding (named specific UI elements from the design) | 1.0 |
-| No fatal errors (pipeline completed, no "could not be completed") | 1.0 |
-| Headline first (lead with the most important finding) | 1.0 |
-| Priority verdict (ship-blocking vs. post-launch polish) | 1.0 |
-| Impact before rules (user consequence stated before rule citation) | 1.0 |
+Rubrics: grounded citations · actionable specificity · no hallucination · professional tone · director voice · impact connected — all 7 cases passed.
 
-> Run it yourself: `uv run adk eval . tests/eval/evalsets/route_b_quality.json --config_file_path tests/eval/eval_config.json --print_detailed_results`
+### Route A — Figma Critique Pipeline (2 test cases, threshold 0.7)
+
+![Radar chart — 8 rubric scores per case](research/public/eval_radar.png)
+
+| Rubric | Case 1 | Case 2 |
+|--------|--------|--------|
+| Critique structure (severity labels, What's Working section) | 1.0 | 1.0 |
+| Rule citations (WCAG SC, Nielsen #, Gestalt, Cognitive Laws) | 1.0 | 1.0 |
+| Actionable fixes (hex values, contrast ratios, px values) | 1.0 | 0.0 |
+| Visual grounding (named specific elements from the design) | 1.0 | 1.0 |
+| No fatal errors (pipeline completed successfully) | 1.0 | 1.0 |
+| Headline first (leads with most important finding) | 1.0 | 1.0 |
+| Priority verdict (ship-blocking vs. post-launch polish) | 1.0 | 1.0 |
+| Impact before rules (user consequence before rule citation) | 1.0 | 1.0 |
+| **Overall** | **1.0 ✅** | **0.875 ✅** |
+
+> Run it yourself:
+> ```bash
+> cd design-ops-navigator/backend
+> uv run adk eval . tests/eval/evalsets/critique_quality.json --config_file_path tests/eval/eval_config_critique.json --print_detailed_results
+> uv run adk eval . tests/eval/evalsets/route_b_quality.json --config_file_path tests/eval/eval_config.json --print_detailed_results
+> ```
 
 ---
 
