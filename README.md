@@ -93,76 +93,33 @@ Full interactive diagram: see [ARCHITECTURE.md](ARCHITECTURE.md)
 | 1 | `ux_knowledge` | `gemini-embedding-001` (768-dim) | WCAG 2.2, Nielsen 10, Gestalt, Cognitive Laws, Material Design 3 |
 | 2 | `user_knowledge` | `gemini-embedding-2-preview` (768-dim, multimodal) | Your design system, brand guidelines, component specs |
 
-Retrieval: top-20 fetch → **hybrid BM25 + RRF reranking** → top-5 returned. Exact terminology (WCAG SC numbers, Hick's Law) gets boosted over pure semantic matches.
+Retrieval: top-20 fetch → **[hybrid BM25 + RRF reranking](design-ops-navigator/backend/tools/rag_tools.py)** → top-5 returned. Exact terminology (WCAG SC numbers, Hick's Law) gets boosted over pure semantic matches.
 
 ---
 
 ## Design Philosophy
 
-Most AI tools for designers make a quiet assumption: the AI should decide, and the human should accept. Vera is built on the opposite premise — the AI does the heavy lifting of research and pattern-matching, and the designer remains fully in control of what gets acted on.
+Most AI tools for designers make a quiet assumption: the AI decides, the human accepts. Vera is built on the opposite premise.
 
-This maps directly to what Ben Shneiderman calls the **upper-right quadrant** of Human-Centered AI (*Human-Centered AI*, Oxford University Press, 2022): high automation *and* high human control, at the same time — not a trade-off between them.
+This maps to what Ben Shneiderman calls the **upper-right quadrant** of Human-Centered AI (*Human-Centered AI*, Oxford University Press, 2022): high automation *and* high human control — not a trade-off between them.
 
 ![HCAI 2x2 — where Vera sits](research/public/hcai_quadrant.png)
 
-In practice this means:
+In practice:
 - Vera never applies a change. It surfaces findings; the designer decides what ships.
-- Every critique cites the specific rule (WCAG 1.4.3, Nielsen #4) and the specific element — not a black-box verdict. You can trace every claim.
-- The Issue Status Tracker (Fixed / In Progress / Won't Fix) gives designers a running audit trail of what the team has chosen to act on — and what they've consciously deprioritized.
-- By explaining *why* something fails a heuristic, Vera builds the designer's own UX knowledge rather than creating dependency on the tool.
+- Every critique cites the specific rule (WCAG 1.4.3, Nielsen #4) and the specific element. Every claim is traceable.
+- The Issue Status Tracker (Fixed / In Progress / Won't Fix) gives the team a running audit trail of what was acted on — and what was consciously deprioritized.
+- By explaining *why* something fails a heuristic, Vera builds the designer's knowledge, not dependency on the tool.
 
-Shneiderman describes this design pattern as a **supertool**: technology that amplifies what a skilled human can do, while the human retains the wheel.
-
----
-
-### How the critique earns its specificity
-
-The most common failure mode of AI-generated feedback is vagueness. "Improve the contrast" tells a designer nothing actionable. Vera enforces specificity at two levels:
-
-**1. Verifiable checks at parse time** — before any response reaches the user, `compute_contrast_ratio()` computes the actual ratio for every hex pair mentioned in the critique. If the model claims a 2.3:1 ratio and the math says 3.1:1, the claim is suppressed. Fixes that don't include a measurement token (`#hex`, `px`, `rem`, `:1` ratio) are rejected outright. These are deterministic checks — no LLM judgment involved.
-
-**2. A self-critique loop** — after the critic agent produces a first draft, a dedicated `self_critic_agent` checks it against 8 quality rules: Are fixes specific? Does every issue cite a named standard? Is severity accurate? Are there signs of issue inflation or monotone citation (citing the same rule for everything)?
-
-```
-critic  →  self_critic  →  revision  →  synthesis
-               ↓               ↓
-          flags issues     fixes only what's flagged
-                           skips entirely if clean
-```
-
-If nothing is flagged, the revision step is skipped — no extra LLM call. This is the SELF-REFINE loop (Madaan et al., NeurIPS 2023) applied to critique quality: generate, reflect, revise only when needed.
-
----
-
-### How retrieval stays accurate
-
-Semantic search alone fails on UX knowledge. A query for "WCAG 1.4.3" returns chunks that *discuss* contrast — but may rank a general accessibility overview above the exact success criterion. Vera uses a hybrid pipeline:
-
-**Dense + lexical fusion (BM25 + RRF)** — vector search captures meaning; BM25 gives exact-term matches (rule numbers, law names, acronyms) a direct boost. Reciprocal Rank Fusion merges both rankings without needing to normalize their scales.
-
-**Diversity filter (MMR)** — if the top-5 chunks are all from the same WCAG section, the critique will repeat the same point five ways. Maximal Marginal Relevance trades a little relevance for coverage across different principles.
-
-**Contextual chunk headers** — each chunk is embedded with a short context prefix ("Source: WCAG 2.2 | Category: Accessibility") so isolated sections don't lose their domain signal. Anthropic's 2024 research on this approach showed a 49% reduction in retrieval failure on vague queries.
-
-**Your team's knowledge (Tier 2)** — if you upload your design system or brand guidelines, they're indexed separately and searched alongside the standard library. The critique becomes specific to your stack, not just generic best practice.
-
----
-
-### Learning from your team's decisions
-
-Every time a designer marks an issue as Fixed, In Progress, or Won't Fix, that signal is stored. On the next critique for the same workspace, the rules your team consistently acts on surface higher; rules you consistently dismiss surface lower. No labels, no training loop — just the natural signal from your workflow.
-
-This is intentionally lightweight. Cold-start is real: a new workspace gets no personalization until it has usage history. We're not hiding that.
-
----
+Shneiderman describes this as a **supertool**: technology that amplifies what a skilled human can do, while the human retains the wheel.
 
 ### Honest limitations
 
-- **Complex nested Figma frames** can confuse the vision model. If a frame is deeply nested or has overlapping components, the visual analysis may miss elements that are obvious to a human glancing at the design.
-- **Contrast ratios are computed from hex values in the node tree**, not from the rendered image. If your design uses gradients, opacity layers, or blended colors, the computed ratio may not match what a user actually sees.
-- **The knowledge base is WCAG 2.2**, not WCAG 3.0 (still in draft). Some newer guidance is not represented.
-- **Implicit personalization has a cold-start problem** — it only works after a workspace has meaningful usage history.
-- **Critique is advisory, not auditable for legal compliance.** Vera's output is a starting point for design review, not a certified accessibility audit.
+- **Complex nested Figma frames** can confuse the vision model. Deeply nested or overlapping components may be missed.
+- **Contrast ratios are computed from hex values in the node tree**, not rendered pixels. Gradients and opacity layers may not match what a user actually sees.
+- **The knowledge base is WCAG 2.2**, not WCAG 3.0 (still in draft).
+- **Implicit personalization has a cold-start problem** — no effect until a workspace has usage history.
+- **Critique is advisory, not a certified accessibility audit.**
 
 ---
 
@@ -172,8 +129,8 @@ Each design decision in the pipeline maps to a published research result.
 
 | Research Area | Source | What it does in Vera |
 |---|---|---|
-| **Constitutional AI + SELF-REFINE** | Bai et al. (Anthropic, 2022) · Madaan et al. (NeurIPS 2023) | `self_critic_agent` checks the first-draft critique against 8 quality rules. `critic_revision_agent` fixes only what's flagged — and **skips entirely** if nothing is. SELF-REFINE applied to critique quality: generate, reflect, revise only when needed. |
-| **RLVR — Verifiable Rewards** | DeepSeek-R1 (2024) · CRITIC | `compute_contrast_ratio()` runs before any response leaves the system. If the model claims 2.3:1 and the math says 3.1:1, the claim is suppressed. Fixes without a measurement token (`#hex`, `px`, `rem`, `:1`) are rejected outright — deterministic, no LLM judgment. |
+| **Constitutional AI + SELF-REFINE** | Bai et al. (Anthropic, 2022) · Madaan et al. (NeurIPS 2023) | [`self_critic_agent`](design-ops-navigator/backend/agents/orchestrator_agent.py) checks the first-draft critique against 8 quality rules. `critic_revision_agent` fixes only what's flagged — and **skips entirely** if nothing is. SELF-REFINE applied to critique quality: generate, reflect, revise only when needed. |
+| **RLVR — Verifiable Rewards** | DeepSeek-R1 (2024) · CRITIC | [`compute_contrast_ratio()`](design-ops-navigator/backend/tools/critic_tools.py) runs before any response leaves the system. If the model claims 2.3:1 and the math says 3.1:1, the claim is suppressed. Fixes without a measurement token (`#hex`, `px`, `rem`, `:1`) are rejected outright — deterministic, no LLM judgment. |
 | **Hybrid BM25 + RRF + MMR** | Robertson & Zaragoza (2009) · Cormack et al. (2009) · Carbonell & Goldstein (1998) | Dense vector search captures meaning; BM25 boosts exact-term matches (WCAG SC numbers, Hick's Law, law names). Reciprocal Rank Fusion merges both rankings without normalization. MMR filters for coverage: top-5 chunks span different principles, not the same WCAG section five ways. |
 | **Contextual Chunk Headers** | Anthropic research (2024) | Each knowledge chunk is embedded with a domain prefix ("Source: WCAG 2.2 \| Category: Accessibility"). Anthropic showed a 49% reduction in retrieval failure on vague queries with this approach. |
 | **Implicit Preference Signals** | Christiano et al. (RLHF, 2017) · Corrective RAG | Fixed / In Progress / Won't Fix clicks write to Firestore. On the next critique for the same workspace, consistently-actioned rules are injected into the Gemini reranking prompt. No labels, no training loop — signal comes from the natural design workflow. |
