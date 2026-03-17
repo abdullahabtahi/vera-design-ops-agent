@@ -113,6 +113,16 @@ In practice:
 
 Shneiderman describes this as a **supertool**: technology that amplifies what a skilled human can do, while the human retains the wheel.
 
+### Guardrails
+
+Trust requires enforcement. A few non-obvious ones worth calling out ([full inventory](research/GUARDRAILS.md)):
+
+- **Output integrity** — [`compute_contrast_ratio()`](design-ops-navigator/backend/tools/critic_tools.py) verifies every contrast claim before it leaves the system. If the model says 2.3:1 and the math says 3.1:1, the claim is suppressed. Fixes without a measurement token are rejected outright — deterministic, no LLM judgment.
+- **Constitutional QA** — [`self_critic_agent`](design-ops-navigator/backend/agents/orchestrator_agent.py) checks the first-draft critique against 8 quality rules before the user sees anything. Revision is skipped entirely if nothing is flagged (zero extra LLM cost).
+- **SSRF protection** — before any external URL is fetched (Playwright screenshots, Figma prefetch), private/loopback IP ranges are blocked. Non-obvious for a hackathon project; necessary for a tool that accepts arbitrary URLs.
+- **Magic byte file verification** — uploaded files are checked by header signature, not just Content-Type. Prevents disguised executables from entering the knowledge base.
+- **Tool call loop detection** — if any tool is called >6× in a single run, the agent is aborted and `RUN_ERROR` is emitted. Prevents runaway cost from unexpected agent loops.
+
 ### Honest limitations
 
 - **Complex nested Figma frames** can confuse the vision model. Deeply nested or overlapping components may be missed.
