@@ -116,8 +116,6 @@ Shneiderman describes this as a **supertool**: technology that amplifies what a 
 ### Honest limitations
 
 - **Complex nested Figma frames** can confuse the vision model. Deeply nested or overlapping components may be missed.
-- **Contrast ratios are computed from hex values in the node tree**, not rendered pixels. Gradients and opacity layers may not match what a user actually sees.
-- **The knowledge base is WCAG 2.2**, not WCAG 3.0 (still in draft).
 - **Implicit personalization has a cold-start problem** — no effect until a workspace has usage history.
 - **Critique is advisory, not a certified accessibility audit.**
 
