@@ -1,8 +1,8 @@
 # Vera — Design Ops Agent
 
-**AI-powered UX critique that thinks like a 15-year design director.**
+**Every good design has legendary design reviews. Almost none of them are reusable.**
 
-Paste a Figma URL (or any website URL). Vera fetches the design, grounds it in WCAG, Nielsen heuristics, Gestalt principles, and your team's design system — then delivers a structured critique with severity labels, specific fixes, and a clear ship/hold verdict. No vague feedback. No hallucinated rules.
+They lived in a senior’s head, a recording, a lost thread. Paste a Figma or screenshot; Vera runs a director-level review against WCAG, Nielsen, Gestalt, and your system, then tells you what’s broken and how to ship it.
 
 [![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://python.org)
 [![Google ADK](https://img.shields.io/badge/Google%20ADK-Multi--Agent-4285F4?logo=google&logoColor=white)](https://google.github.io/adk-docs)
@@ -21,7 +21,7 @@ Paste a Figma URL (or any website URL). Vera fetches the design, grounds it in W
 
 ### TL;DR
 
-- **Problem** — Manual UX critique takes hours, requires a senior researcher, and rarely happens early enough — most teams discover accessibility failures in QA, not design review.
+- **Problem** — Manual UX critique takes hours, depends on a few senior brains, and rarely happens early enough — most teams discover accessibility failures in QA, not design review.
 - **Solution** — A UI Navigator agent that *sees* Figma frames and live websites via Gemini 2.5 Flash vision, then grounds critique in WCAG / Nielsen / Gestalt — no text description of the design needed. Paste a URL, get a severity-ranked report in seconds.
 - **Impact** — Expert-level UX feedback on demand. Design → critique in under minutes. Any designer, any Figma file, any live URL.
 - **Technically novel** — 5-agent ADK pipeline (Sequential + Parallel) · dual-tier RAG with BM25+RRF+MMR reranking · Constitutional self-critique loop (SELF-REFINE, Madaan NeurIPS 2023) · RLVR verifiable reward checks on every contrast claim.
@@ -379,3 +379,5 @@ design-ops-navigator/
 Vera demonstrates what's possible when Gemini 2.5 Flash powers a multi-agent system purpose-built for a professional domain. The agent doesn't just retrieve rules — it reasons about them against a specific design, prioritizes by real user impact, and delivers the kind of critique that usually requires booking 30 minutes with your most senior designer.
 
 The constitutional QA pipeline (self-critic → revision) ensures every output meets the same rubric that human design directors use: specificity, grounded citations, actionable fixes, and a clear verdict.
+
+By Abdullah Abtahi - Product Designer, Google UX Design Certified (Aspiring AI Engineer)
