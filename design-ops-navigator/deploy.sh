@@ -9,24 +9,34 @@
 #
 # Prerequisites:
 #   gcloud CLI installed + authenticated
-#   gcloud config set project invertible-tree-490306-j1
+#   gcloud config set project <your-gcp-project-id>
+#
+# Required environment variables (set in .env or export before running):
+#   GCP_PROJECT_ID       - Your GCP project ID
+#   FIREBASE_API_KEY     - Firebase Web API key
 
 set -euo pipefail
 
-PROJECT="invertible-tree-490306-j1"
+# ── Load .env if present ───────────────────────────────────────────────────────
+if [[ -f .env ]]; then
+  # shellcheck disable=SC1091
+  set -a; source .env; set +a
+fi
+
+PROJECT="${GCP_PROJECT_ID:?GCP_PROJECT_ID is required — set it in .env or export it}"
 REGION="us-central1"
 BACKEND_SERVICE="vera-backend"
 FRONTEND_SERVICE="vera-frontend"
 BACKEND_IMAGE="gcr.io/${PROJECT}/${BACKEND_SERVICE}"
 FRONTEND_IMAGE="gcr.io/${PROJECT}/${FRONTEND_SERVICE}"
 
-# Firebase client config (public — safe to embed in scripts)
-FIREBASE_API_KEY="AIzaSyDLm6A3lcvK8EnWwqJ1vS2gdvoucAbGONM"
-FIREBASE_AUTH_DOMAIN="invertible-tree-490306-j1.firebaseapp.com"
-FIREBASE_PROJECT_ID="invertible-tree-490306-j1"
-FIREBASE_STORAGE_BUCKET="invertible-tree-490306-j1.firebasestorage.app"
-FIREBASE_MESSAGING_SENDER_ID="1022027891460"
-FIREBASE_APP_ID="1:1022027891460:web:759277fda64ff37cff4651"
+# Firebase client config — loaded from environment (never hardcode in source)
+FIREBASE_API_KEY="${FIREBASE_API_KEY:?FIREBASE_API_KEY is required — set it in .env or export it}"
+FIREBASE_AUTH_DOMAIN="${FIREBASE_AUTH_DOMAIN:-${PROJECT}.firebaseapp.com}"
+FIREBASE_PROJECT_ID="${FIREBASE_PROJECT_ID:-${PROJECT}}"
+FIREBASE_STORAGE_BUCKET="${FIREBASE_STORAGE_BUCKET:-${PROJECT}.firebasestorage.app}"
+FIREBASE_MESSAGING_SENDER_ID="${FIREBASE_MESSAGING_SENDER_ID:?FIREBASE_MESSAGING_SENDER_ID is required — set it in .env or export it}"
+FIREBASE_APP_ID="${FIREBASE_APP_ID:?FIREBASE_APP_ID is required — set it in .env or export it}"
 
 # ── One-time setup ─────────────────────────────────────────────────────────────
 if [[ "${1:-}" == "--setup" ]]; then
@@ -60,7 +70,6 @@ if [[ "${1:-}" == "--setup" ]]; then
   echo "→ Creating secrets in Secret Manager..."
   echo "  Paste each value when prompted, then press Enter + Ctrl+D."
   echo ""
-
   for SECRET in FIGMA_ACCESS_TOKEN JINA_API_KEY ALLOWED_ORIGINS; do
     if gcloud secrets describe "${SECRET}" --project="${PROJECT}" &>/dev/null; then
       echo "  (${SECRET} already exists — skipping)"
@@ -96,7 +105,6 @@ deploy_backend() {
 
   echo "→ Deploying vera-backend to Cloud Run..."
   SA_EMAIL="${BACKEND_SERVICE}-sa@${PROJECT}.iam.gserviceaccount.com"
-
   gcloud run deploy "${BACKEND_SERVICE}" \
     --image="${BACKEND_IMAGE}:latest" \
     --region="${REGION}" \
@@ -126,7 +134,6 @@ deploy_frontend() {
   echo ""
   echo "══ Frontend ═══════════════════════════════════════"
   echo "→ Building frontend image (NEXT_PUBLIC_BACKEND_URL=${BACKEND_URL})..."
-
   # Use frontend/cloudbuild.yaml — passes NEXT_PUBLIC_* vars as build args
   gcloud builds submit frontend/ \
     --project="${PROJECT}" \
@@ -162,16 +169,16 @@ deploy_frontend() {
 
   echo ""
   echo "══════════════════════════════════════════════════"
-  echo "  Vera is live!"
-  echo "  Frontend: ${FRONTEND_URL}"
-  echo "  Backend:  $(get_backend_url)"
+  echo " Vera is live!"
+  echo " Frontend: ${FRONTEND_URL}"
+  echo " Backend:  $(get_backend_url)"
   echo "══════════════════════════════════════════════════"
   echo ""
-  echo "  POST-DEPLOY:"
-  echo "  1. Firebase Console → Authentication → Settings → Authorized Domains"
-  echo "     Add: $(echo "${FRONTEND_URL}" | sed 's|https://||')"
-  echo "  2. Deploy Firestore rules:"
-  echo "     firebase deploy --only firestore:rules --project ${PROJECT}"
+  echo " POST-DEPLOY:"
+  echo " 1. Firebase Console → Authentication → Settings → Authorized Domains"
+  echo "    Add: $(echo "${FRONTEND_URL}" | sed 's|https://||')"
+  echo " 2. Deploy Firestore rules:"
+  echo "    firebase deploy --only firestore:rules --project ${PROJECT}"
 }
 
 # ── Entrypoint ─────────────────────────────────────────────────────────────────
