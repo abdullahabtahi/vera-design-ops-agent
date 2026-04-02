@@ -30,7 +30,7 @@ FRONTEND_SERVICE="vera-frontend"
 BACKEND_IMAGE="gcr.io/${PROJECT}/${BACKEND_SERVICE}"
 FRONTEND_IMAGE="gcr.io/${PROJECT}/${FRONTEND_SERVICE}"
 
-# Firebase client config — loaded from environment (never hardcode in source)
+# Firebase web config — includes a public API key; access is enforced by Firebase Rules/App Check 
 FIREBASE_API_KEY="${FIREBASE_API_KEY:?FIREBASE_API_KEY is required — set it in .env or export it}"
 FIREBASE_AUTH_DOMAIN="${FIREBASE_AUTH_DOMAIN:-${PROJECT}.firebaseapp.com}"
 FIREBASE_PROJECT_ID="${FIREBASE_PROJECT_ID:-${PROJECT}}"
