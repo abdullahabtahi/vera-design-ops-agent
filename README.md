@@ -322,6 +322,30 @@ Paste a Figma URL and hit **Critique →**
 
 ---
 
+## Deploying to Cloud Run
+
+Copy `.env.example` to `.env` and fill in the required values, then:
+
+```bash
+# One-time setup: creates service account, IAM roles, and GCP secrets
+./design-ops-navigator/deploy.sh --setup
+
+# Deploy both backend and frontend to Cloud Run
+./design-ops-navigator/deploy.sh
+```
+
+| Variable | Where to get it |
+|---|---|
+| `GCP_PROJECT_ID` | Your GCP project ID |
+| `FIREBASE_API_KEY` | Firebase Console → Project Settings → Web app config. This key is [intentionally public](https://firebase.google.com/docs/projects/api-keys) — it identifies the project, not a secret. |
+| `FIREBASE_MESSAGING_SENDER_ID` | Firebase Console → Project Settings |
+| `FIREBASE_APP_ID` | Firebase Console → Project Settings |
+| `FIGMA_ACCESS_TOKEN` | figma.com → Settings → Security → Personal access tokens (stored in GCP Secret Manager, never in code) |
+
+> **Production secrets** (`FIGMA_ACCESS_TOKEN`, `JINA_API_KEY`, `ALLOWED_ORIGINS`) are managed via [GCP Secret Manager](https://cloud.google.com/secret-manager) and injected at runtime — they are never written to source or environment files.
+
+---
+
 ## How it works (Route A — Figma critique)
 
 1. **URL parsing** — `server.py` extracts `file_key` + `node_id` from the Figma URL
